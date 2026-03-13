@@ -29,6 +29,7 @@ Backend-only take-home assessment: build a Node.js Express API that fetches Bitc
 ```bash
 cd backend-ai-assessment
 npm install
+npm test
 npm start
 ```
 
@@ -40,6 +41,12 @@ Server runs at `http://localhost:3002` by default (or set `PORT`). Optional env 
 - `BINANCE_BASE_URL` – default `https://api.binance.com` (or your chosen API base)
 
 See `.env.example` for a template.
+
+Swagger UI for manual testing is available at:
+
+- `http://localhost:3002/api/docs`
+- Raw OpenAPI JSON: `http://localhost:3002/api/docs.json`
+- Helper command: `npm run docs` (prints links and checks endpoint availability)
 
 ---
 
@@ -54,7 +61,30 @@ See `.env.example` for a template.
 
 ---
 
-## 5. Evaluation criteria
+## 5. Test and local verification
+
+Run the automated suite:
+
+```bash
+npm test
+```
+
+Smoke test commands (in another terminal while `npm start` is running):
+
+```bash
+curl -s "http://localhost:3002/api/health"
+curl -s "http://localhost:3002/api/market/price?symbol=BTCUSDT"
+curl -s "http://localhost:3002/api/market/klines?symbol=BTCUSDT&interval=1h&limit=5"
+curl -s -X POST "http://localhost:3002/api/ask" \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What does the latest BTC price imply for short-term risk?"}'
+```
+
+If Ollama is offline, health should still return `{ "ok": true, "ollama": "unreachable" }`.
+
+---
+
+## 6. Evaluation criteria
 
 - **Market integration:** Correct use of your chosen API (e.g. Binance klines/price), error handling, and logging of requests.
 - **Ollama integration:** Health check and at least one Q&A endpoint that sends a prompt (with optional market context) to Ollama and returns the response; timeout/error handling and logging.
@@ -63,9 +93,10 @@ See `.env.example` for a template.
 
 ---
 
-## 6. Hosting and submission
+## 7. Hosting and submission
 
 - **Host with nginx:** Deploy the application behind **nginx** (e.g. as a reverse proxy to the Node process) and ensure all API routes are reachable.
+- Example nginx reverse-proxy config is provided at `deploy/nginx.conf`.
 - **Share the hosted URL:** Provide the public URL of your deployed backend so we can test the APIs (health, market, ask) against your live service.
 - **Code:** Ensure the app runs locally (`npm install` then `npm start`, with Ollama running if using `/api/health` or `/api/ask`). Include a short `NOTES.md` with your market API choice, design goals, trade-offs, and any known issues.
 - Submit the `assessment-ai-backend` folder (excluding `node_modules`).
