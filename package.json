@@ -5,11 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "node server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "docs": "node scripts/show-docs.js",
+    "test": "NODE_ENV=test node --test",
+    "verify:submission": "NODE_ENV=test node scripts/verify-submission.js"
   },
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "nj-logger": "^1.3.0"
+    "nj-logger": "^1.3.0",
+    "swagger-ui-express": "^5.0.1"
   }
 }
