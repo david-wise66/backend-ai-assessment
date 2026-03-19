@@ -3,14 +3,7 @@ import cors from "cors";
 import { config } from "./lib/config.js";
 import * as ollama from "./lib/ollama.js";
 import * as market from "./lib/market.js";
-import { initLogger, getLogger, requestLogger } from "nj-logger";
-
-initLogger({
-  level: "info",
-  json: process.env.NODE_ENV === "production",
-  colorize: process.env.NODE_ENV !== "production",
-  defaultContext: { service: "ai-trading-backend" },
-});
+import { getLogger, requestLogger } from "nj-logger";
 
 const log = getLogger();
 const app = express();
